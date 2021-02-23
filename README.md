@@ -49,7 +49,7 @@ After this, the word2vec tool can be used to train models.
 
 * pip install --upgrade gensim
 
-Then you can use gensim in python to do thins like 
+Then you can use gensim in python to do things like 
 
 ```
 sentences = ... # Matrix of sentences divided into words (e.g [['hello', 'world'],['how', 'are', 'you']])
@@ -169,4 +169,4 @@ print(result)
 ### Annoy 
 * [Annoy Approximate Nearest Neighbors Oh Yeah](https://github.com/spotify/annoy)
 * [Similarity Queries with Annoy and Word2Vec](https://radimrehurek.com/gensim_3.8.3/auto_examples/tutorials/run_annoy.html)
-
+* [ConceptNet](http://conceptnet5.media.mit.edu/)
