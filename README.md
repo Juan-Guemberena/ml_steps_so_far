@@ -2,6 +2,84 @@
 Show and give instructions to reproduce what we have already done so far
 
 
+# OpenAI
+
+## Install instructions
+
+Get your API key from [here](https://beta.openai.com/docs/developer-quickstart/your-api-keys).
+Set it as an env variable or store it with a secret management service.
+
+Run
+
+```
+pip install openai
+```
+and then you can use it in your code like this:
+
+```
+import os
+import openai
+
+# Load your API key from an environment variable or secret management service
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+response = openai.Completion.create(engine="davinci", prompt="This is a test", max_tokens=5)
+```
+This should return something like:
+```
+{
+    "id": "cmpl-GERzeJQ4lvqPk8SkZu4XMIuR",
+    "object": "text_completion",
+    "created": 1586839808,
+    "model": "davinci:2020-05-03",
+    "choices": [{
+        "text": " of reading speed. You",
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "length"
+    }]
+}
+```
+
+You can also make cURL requests, like this (replacing YOUR_API_KEY with the proper key):
+```
+curl https://api.openai.com/v1/engines/davinci/completions \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer YOUR_API_KEY" \
+-d '{"prompt": "This is a test", "max_tokens": 5}'
+```
+## [API Reference](https://beta.openai.com/docs/api-reference/introduction)
+
+The first thing to note is that OpenAi provides different [engines](https://beta.openai.com/docs/engines), Davinci being the highest performing one, and Ada the fastest and cheapest.
+
+They provide access to the API in the form of tokens, with 100 tokens approximately being 400 characters of text.
+
+#### List of engines and their best use-cases (based on their docs)
+
+* Davinci. Good at: Complex intent, cause and effect, summarization for audience.
+* Curie. Good at: Language translation, complex classification, text sentiment, summarization.
+* Babbage. Good at: Moderate classification, semantic search classification.
+* Ada. Good at: Parsing text, simple classification, address correction, keywords.
+
+ 
+The second thing to note is that they have simplified hyper-parameter tuning a bit, with temperature and top_p being the most important parameters. [Read more](https://towardsdatascience.com/how-to-sample-from-language-models-682bceb97277)
+
+Temperature: Lower temperatures make the model increasingly confident in its top choices, while temperatures greater than 1 decrease confidence. 0 temperature is equivalent to argmax/max likelihood, while infinite temperature corresponds to a uniform sampling. 
+
+So we would set a low temperature for pre-defined or structured answers (aka yes or no, or sentiment answers), and a high temperature for creative applications (like convergence)
+
+Top P sampling (nucleus sampling): compute the cumulative distribution and cut off as soon as the CDF exceeds P. This helps avoiding egregiously wrong tokens while also preserving variety when the highest scoring tokens have low confidence.
+
+
+The third thing to note is that OpenAI provides 2 more engines, called [Instruct series](https://beta.openai.com/docs/engines/the-instruct-series-beta), which can take, understand and follow a series of instructions. This can be used to create a product like the one seen [here](https://twitter.com/sharifshameem/status/1282676454690451457).
+
+The last thing to note is that they also provide a [Content Filter](https://beta.openai.com/docs/engines/content-filter), which can be used to detect and avoid profanity or strong language. The filter classifies generated text in 3 categories: safe, sensitive or unsafe. They even provide an example Python code that checks the label returned by the filter as well as the logprobs, to thoroughly check that the returned label is correct.
+
+With all of this, we should be capable of quickly developing any idea we have and try it out either locally or with their [Playground](https://beta.openai.com/playground), which unfortunately uses your token quota as well.
+
+
+
+
 # Word2Vec to train
 
 [Docs](https://code.google.com/archive/p/word2vec/)
